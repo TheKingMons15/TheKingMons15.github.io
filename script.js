@@ -91,4 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     cargarImagenAleatoria();
+    function agregarTamaño() {
+        var imagen = document.getElementById("imagen");
+        imagen.classList.toggle("grande"); // Alterna entre agrandar y restaurar el tamaño
+    }
+    
 });
