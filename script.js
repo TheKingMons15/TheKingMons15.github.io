@@ -16,16 +16,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const mensajesRechazo = [
         "¿Segura?",
         "¿Segurisima?",
-        "¿De verdad de la buena?",
+        "Analiza muy bien!",
         "Piénsalo mejor...",
-        "¿No te gustaría reconsiderarlo?",
-        "Una última oportunidad...",
-        "¿Estás completamente segura?",
+        "¿Pamela no te gustaría reconsiderarlo?",
+        "¿Mi amorcito corazón estás completamente segura?",
         "Mira que te vas a arrepentir...",
-        "¿De verdad me vas a decir que no? 🥺",
-        "No acepto un no por respuesta 😊"
+        "¿Mensa de verdad me vas a decir que no? 🥺",
+        "No acepto un no por respuesta jajaja😊"
     ];
     
+    const textosBoton = [
+        "Si...", 
+        "Siguiente..", 
+        "Ajam", 
+        "Ya pense", 
+        "NO", 
+        "Si Segura", 
+        "Nop... ", 
+        "Última oportunidad...", 
+        "¡Lo pensaste bien, verdad?"
+    ];
+
     let indiceRechazo = 0;
 
     // Función para cambiar entre pantallas
@@ -40,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function mostrarDialogo() {
         dialogo.contenedor.classList.add('active');
         dialogo.mensaje.textContent = mensajesRechazo[indiceRechazo];
+        dialogo.btnNo.textContent = textosBoton[indiceRechazo]; // Cambiar el texto del botón
     }
 
     // Función para ocultar el diálogo
@@ -68,16 +80,14 @@ document.addEventListener('DOMContentLoaded', () => {
             mostrarPantalla('respuestaPositiva');
         } else {
             dialogo.mensaje.textContent = mensajesRechazo[indiceRechazo];
+            dialogo.btnNo.textContent = textosBoton[indiceRechazo]; // Cambiar el texto del botón según el índice
         }
     });
 
     // Cargar imagen aleatoria
     const cargarImagenAleatoria = () => {
         const randomImage = document.getElementById('randomImage');
-        // Aquí normalmente se usaría una API de imágenes, pero para el ejemplo
-        // usamos un placeholder. En producción, podrías usar algo como:
-        // randomImage.src = `https://source.unsplash.com/400x300/?love,valentine`;
-        randomImage.src = '/api/placeholder/400/300';
+        randomImage.src = '/api/placeholder/400/300'; // Imagen de prueba
     };
 
     cargarImagenAleatoria();
