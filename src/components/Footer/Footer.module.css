@@ -1,0 +1,108 @@
+.footer {
+  background-color: #006633;
+  color: white;
+  padding: 3rem 2rem;
+  border-top: 3px solid #FFCE00;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  box-sizing: border-box;
+  position: absolute;
+  padding-top: 9%;
+}
+
+.footerContent {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 3rem;
+  width: 100vw;
+  margin: 0;
+  align-items: start;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+
+/* logo principal alineado a la izquierda */
+.logoContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.logo {
+  width: 200px;
+  height: auto;
+  filter: brightness(0) invert(1);
+}
+
+/* estilos para el logo adicional debajo de redes sociales */
+.extraLogoContainer {
+
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.extraLogo {
+  width: 150px;
+  height: auto;
+  filter: brightness(0) invert(1);
+}
+
+.footerSection {
+  padding: 0 1.5rem;
+  text-align: left;
+}
+
+.footerSection h3 {
+  color: #FFCE00;
+  margin-bottom: 1.5rem;
+  font-size: 1.25rem;
+  border-bottom: 1px solid #FFCE0055;
+  padding-bottom: 0.5rem;
+}
+
+.footerSection ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footerSection li {
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.footerSection li:hover {
+  color: #FFCE00;
+  transform: translateX(5px);
+}
+
+@media (max-width: 768px) {
+  .footerContent {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .footerSection {
+    padding: 1rem 0;
+    text-align: center;
+  }
+
+  .footerSection h3 {
+    border-bottom: none;
+  }
+
+  .footerSection li:hover {
+    transform: none;
+  }
+
+  /* centrar los logos en pantallas pequeñas */
+  .logoContainer,
+  .extraLogoContainer {
+    justify-content: center;
+  }
+}
