@@ -1,14 +1,793 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
-    <script type="module" crossorigin src="/assets/index-CK4zrqz0.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-CCKEaaQH.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Vision Scanner</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Animated background particles */
+    .particle {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      animation: float 10s infinite;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      90% {
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(-100vh) translateX(50px);
+        opacity: 0;
+      }
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 30px;
+      padding: 35px;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+      max-width: 550px;
+      width: 100%;
+      position: relative;
+      z-index: 10;
+      animation: slideUp 0.6s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo {
+      font-size: 50px;
+      margin-bottom: 10px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.1);
+      }
+    }
+
+    h1 {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      color: #666;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .stats-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+
+    .stat-card {
+      flex: 1;
+      background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+      padding: 15px;
+      border-radius: 15px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: bold;
+      color: #667eea;
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 5px;
+    }
+
+    #webcam-container {
+      position: relative;
+      width: 100%;
+      margin: 20px 0;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #000;
+      display: none;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    #webcam-container::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #667eea);
+      border-radius: 20px;
+      z-index: -1;
+      animation: borderRotate 3s linear infinite;
+      background-size: 300% 300%;
+    }
+
+    @keyframes borderRotate {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    #webcam-container canvas {
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    .camera-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 200px;
+      height: 200px;
+      border: 3px solid rgba(255, 255, 255, 0.5);
+      border-radius: 20px;
+      pointer-events: none;
+    }
+
+    .camera-overlay::before,
+    .camera-overlay::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #fff;
+    }
+
+    .camera-overlay::before {
+      top: -3px;
+      left: -3px;
+      border-right: none;
+      border-bottom: none;
+    }
+
+    .camera-overlay::after {
+      bottom: -3px;
+      right: -3px;
+      border-left: none;
+      border-top: none;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 18px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-start {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-start:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+    }
+
+    .btn-start:active {
+      transform: translateY(0);
+    }
+
+    .btn-stop {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+      display: none;
+      box-shadow: 0 5px 20px rgba(239, 68, 68, 0.4);
+    }
+
+    .btn-capture {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      display: none;
+      box-shadow: 0 5px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-switch {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: white;
+      display: none;
+      flex: 0 0 60px;
+      padding: 18px 10px;
+    }
+
+    #label-container {
+      margin-top: 20px;
+    }
+
+    .prediction {
+      padding: 18px;
+      margin: 12px 0;
+      background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+      border-radius: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 15px;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .prediction::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      transition: width 0.3s;
+    }
+
+    .prediction-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    .prediction.top {
+      border-color: #667eea;
+      box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+      transform: scale(1.02);
+    }
+
+    .prediction-name {
+      font-weight: bold;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .prediction-icon {
+      font-size: 20px;
+    }
+
+    .prediction-value {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 8px 18px;
+      border-radius: 25px;
+      font-weight: bold;
+      font-size: 16px;
+      box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+    }
+
+    .progress-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      transition: width 0.3s;
+      border-radius: 0 0 15px 15px;
+    }
+
+    .loading {
+      text-align: center;
+      color: #666;
+      padding: 25px;
+      display: none;
+    }
+
+    .spinner {
+      border: 4px solid #f3f4f6;
+      border-top: 4px solid #667eea;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .status {
+      text-align: center;
+      padding: 15px 20px;
+      border-radius: 12px;
+      margin: 15px 0;
+      font-weight: 600;
+      display: none;
+      animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .status.success {
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+      color: #065f46;
+    }
+
+    .status.error {
+      background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+      color: #991b1b;
+    }
+
+    .status.info {
+      background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+      color: #1e40af;
+    }
+
+    .history {
+      margin-top: 25px;
+      padding: 20px;
+      background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+      border-radius: 15px;
+      display: none;
+    }
+
+    .history-title {
+      font-weight: bold;
+      color: #6b21a8;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .history-item {
+      padding: 12px;
+      background: white;
+      border-radius: 10px;
+      margin: 8px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .history-time {
+      color: #666;
+      font-size: 12px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 2px solid #e5e7eb;
+      color: #666;
+      font-size: 13px;
+    }
+
+    .fps-counter {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 12px;
+      font-weight: bold;
+      display: none;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 25px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .controls {
+        flex-direction: column;
+      }
+
+      .btn-switch {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Animated particles -->
+  <script>
+    for (let i = 0; i < 20; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.animationDelay = Math.random() * 10 + 's';
+      particle.style.animationDuration = (Math.random() * 5 + 5) + 's';
+      document.body.appendChild(particle);
+    }
+  </script>
+
+  <div class="container">
+    <div class="header">
+      <div class="logo">🤖</div>
+      <h1>AI Vision Scanner</h1>
+      <div class="subtitle">Reconocimiento en tiempo real</div>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-card">
+        <span class="stat-value" id="scan-count">0</span>
+        <span class="stat-label">Escaneos</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="confidence">0%</span>
+        <span class="stat-label">Confianza</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="fps">0</span>
+        <span class="stat-label">FPS</span>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-start" onclick="init()">
+        <span>▶️</span> Iniciar Cámara
+      </button>
+      <button class="btn btn-stop" onclick="stop()">
+        <span>⏹️</span> Detener
+      </button>
+      <button class="btn btn-capture" onclick="capture()">
+        <span>📸</span> Capturar
+      </button>
+      <button class="btn btn-switch" onclick="switchCamera()">
+        <span>🔄</span>
+      </button>
+    </div>
+
+    <div class="status" id="status"></div>
+
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <div>Cargando modelo de IA...</div>
+    </div>
+
+    <div id="webcam-container">
+      <div class="camera-overlay"></div>
+      <div class="fps-counter" id="fps-counter">0 FPS</div>
+    </div>
+
+    <div id="label-container"></div>
+
+    <div class="history" id="history">
+      <div class="history-title">
+        <span>📊</span> Historial de Detecciones
+      </div>
+      <div id="history-list"></div>
+    </div>
+
+    <div class="footer">
+      Powered by TensorFlow.js & Teachable Machine
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+  <script>
+    const URL = "./my_model/";
+
+    let model, webcam, labelContainer, maxPredictions;
+    let isRunning = false;
+    let useFrontCamera = false;
+    let scanCount = 0;
+    let detectionHistory = [];
+    let lastFrameTime = Date.now();
+    let frameCount = 0;
+
+    const icons = ['🎯', '⭐', '🔥', '💎', '🎨', '🎪', '🎭', '🎬'];
+
+    async function init() {
+      if (isRunning) return;
+
+      try {
+        showLoading(true);
+        showStatus('🚀 Cargando modelo de IA...', 'info');
+
+        const modelURL = URL + "model.json";
+        const metadataURL = URL + "metadata.json";
+
+        model = await tmImage.load(modelURL, metadataURL);
+        maxPredictions = model.getTotalClasses();
+
+        showStatus('📹 Iniciando cámara...', 'info');
+
+        const flip = useFrontCamera;
+        const facingMode = useFrontCamera ? "user" : "environment";
+        webcam = new tmImage.Webcam(400, 400, flip);
+        await webcam.setup({ facingMode: facingMode });
+        await webcam.play();
+
+        isRunning = true;
+        window.requestAnimationFrame(loop);
+
+        document.getElementById("webcam-container").style.display = "block";
+        document.getElementById("webcam-container").appendChild(webcam.canvas);
+        document.getElementById("fps-counter").style.display = "block";
+
+        labelContainer = document.getElementById("label-container");
+        labelContainer.innerHTML = "";
+        for (let i = 0; i < maxPredictions; i++) {
+          const div = document.createElement("div");
+          div.className = "prediction";
+          labelContainer.appendChild(div);
+        }
+
+        document.querySelector('.btn-start').style.display = 'none';
+        document.querySelector('.btn-stop').style.display = 'flex';
+        document.querySelector('.btn-capture').style.display = 'flex';
+        document.querySelector('.btn-switch').style.display = 'flex';
+        document.getElementById('history').style.display = 'block';
+
+        showStatus('✅ ¡Cámara activa! Listo para escanear', 'success');
+        showLoading(false);
+
+      } catch (error) {
+        showStatus('❌ Error: ' + error.message, 'error');
+        showLoading(false);
+        console.error(error);
+      }
+    }
+
+    async function loop() {
+      if (!isRunning) return;
+
+      webcam.update();
+      await predict();
+
+      // Calculate FPS
+      frameCount++;
+      const currentTime = Date.now();
+      if (currentTime - lastFrameTime >= 1000) {
+        const fps = frameCount;
+        document.getElementById('fps').textContent = fps;
+        document.getElementById('fps-counter').textContent = fps + ' FPS';
+        frameCount = 0;
+        lastFrameTime = currentTime;
+      }
+
+      window.requestAnimationFrame(loop);
+    }
+
+    async function predict() {
+      const prediction = await model.predict(webcam.canvas);
+
+      // Sort predictions by probability
+      prediction.sort((a, b) => b.probability - a.probability);
+
+      let maxConfidence = 0;
+
+      for (let i = 0; i < maxPredictions; i++) {
+        const probability = prediction[i].probability * 100;
+        const isTop = i === 0;
+
+        if (isTop) {
+          maxConfidence = probability;
+        }
+
+        const predDiv = labelContainer.childNodes[i];
+        predDiv.className = isTop ? "prediction top" : "prediction";
+        predDiv.innerHTML = `
+                    <div class="prediction-content">
+                        <span class="prediction-name">
+                            <span class="prediction-icon">${icons[i % icons.length]}</span>
+                            ${prediction[i].className}
+                        </span>
+                        <span class="prediction-value">${probability.toFixed(0)}%</span>
+                    </div>
+                    <div class="progress-bar" style="width: ${probability}%"></div>
+                `;
+      }
+
+      document.getElementById('confidence').textContent = maxConfidence.toFixed(0) + '%';
+    }
+
+    function capture() {
+      if (!isRunning) return;
+
+      scanCount++;
+      document.getElementById('scan-count').textContent = scanCount;
+
+      const prediction = model.predict(webcam.canvas);
+      prediction.then(results => {
+        results.sort((a, b) => b.probability - a.probability);
+        const topResult = results[0];
+
+        addToHistory(topResult.className, (topResult.probability * 100).toFixed(0));
+
+        showStatus(`📸 Capturado: ${topResult.className} (${(topResult.probability * 100).toFixed(0)}%)`, 'success');
+
+        // Flash effect
+        const container = document.getElementById('webcam-container');
+        container.style.opacity = '0.5';
+        setTimeout(() => {
+          container.style.opacity = '1';
+        }, 100);
+      });
+    }
+
+    function addToHistory(className, confidence) {
+      const now = new Date();
+      const time = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+      detectionHistory.unshift({ className, confidence, time });
+      if (detectionHistory.length > 5) {
+        detectionHistory.pop();
+      }
+
+      const historyList = document.getElementById('history-list');
+      historyList.innerHTML = '';
+
+      detectionHistory.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'history-item';
+        div.innerHTML = `
+                    <span><strong>${item.className}</strong> - ${item.confidence}%</span>
+                    <span class="history-time">${item.time}</span>
+                `;
+        historyList.appendChild(div);
+      });
+    }
+
+    async function switchCamera() {
+      if (!isRunning) return;
+
+      useFrontCamera = !useFrontCamera;
+      await stop();
+      setTimeout(() => init(), 500);
+    }
+
+    async function stop() {
+      if (!isRunning) return;
+
+      isRunning = false;
+
+      if (webcam) {
+        webcam.stop();
+      }
+
+      document.getElementById("webcam-container").style.display = "none";
+      document.getElementById("label-container").innerHTML = "";
+      document.querySelector('.btn-start').style.display = 'flex';
+      document.querySelector('.btn-stop').style.display = 'none';
+      document.querySelector('.btn-capture').style.display = 'none';
+      document.querySelector('.btn-switch').style.display = 'none';
+
+      showStatus('⏸️ Cámara detenida', 'info');
+    }
+
+    function showLoading(show) {
+      document.getElementById('loading').style.display = show ? 'block' : 'none';
+    }
+
+    function showStatus(message, type) {
+      const status = document.getElementById('status');
+      status.textContent = message;
+      status.className = 'status ' + type;
+      status.style.display = 'block';
+
+      setTimeout(() => {
+        status.style.display = 'none';
+      }, 3000);
+    }
+  </script>
+</body>
+
 </html>
