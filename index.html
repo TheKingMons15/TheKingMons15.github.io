@@ -332,6 +332,11 @@
       transform: scale(1.02);
     }
 
+    .prediction-name.healthy {
+      color: #10b981;
+      font-weight: bold;
+    }
+
     .prediction-name.low-confidence {
       color: #999;
       font-style: italic;
@@ -524,8 +529,8 @@
   <div class="container">
     <div class="header">
       <div class="logo">🤖</div>
-      <h1>AI Vision Scanner</h1>
-      <div class="subtitle">Reconocimiento en tiempo real</div>
+      <h1>Detector de Enfermedades</h1>
+      <div class="subtitle">Diagnóstico de plantas en tiempo real</div>
     </div>
 
     <div class="stats-bar">
@@ -588,11 +593,9 @@
   <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
   <script>
     // ========================================
-    // TU MODELO EN GITHUB PAGES
+    // TU MODELO DE DETECCIÓN DE ENFERMEDADES
     // ========================================
-    const URL = "https://thekingmons15.github.io/my_model/";
-
-    // ¡Listo! Tu modelo ya está configurado
+    const URL = "https://teachablemachine.withgoogle.com/models/qvf7BomTp/";
 
     let model, webcam, labelContainer, maxPredictions;
     let isRunning = false;
@@ -602,7 +605,7 @@
     let lastFrameTime = Date.now();
     let frameCount = 0;
 
-    const icons = ['🎯', '⭐', '🔥', '💎', '🎨', '🎪', '🎭', '🎬'];
+    const icons = ['🦠', '💧', '⚪', '🟤', '🔴'];
 
     async function init() {
       if (isRunning) return;
@@ -619,10 +622,20 @@
 
         showStatus('📹 Iniciando cámara...', 'info');
 
-        const flip = useFrontCamera;
+        // Configurar webcam optimizada para plantas
+        const flip = false;
         const facingMode = useFrontCamera ? "user" : "environment";
+
+        // Configuración mejorada para captura de plantas
         webcam = new tmImage.Webcam(400, 400, flip);
-        await webcam.setup({ facingMode: facingMode });
+        const constraints = {
+          facingMode: facingMode,
+          width: { ideal: 1920 },
+          height: { ideal: 1920 },
+          focusMode: 'continuous' // Enfoque continuo para hojas
+        };
+
+        await webcam.setup(constraints);
         await webcam.play();
 
         isRunning = true;
@@ -683,7 +696,7 @@
       prediction.sort((a, b) => b.probability - a.probability);
 
       let maxConfidence = 0;
-      const CONFIDENCE_THRESHOLD = 60; // Umbral mínimo de confianza (ajústalo: 50-80)
+      const CONFIDENCE_THRESHOLD = 40; // Umbral ajustado para modelo de enfermedades (40-70)
 
       for (let i = 0; i < maxPredictions; i++) {
         const probability = prediction[i].probability * 100;
@@ -740,10 +753,18 @@
       prediction.then(results => {
         results.sort((a, b) => b.probability - a.probability);
         const topResult = results[0];
+        const topConfidence = topResult.probability * 100;
 
-        addToHistory(topResult.className, (topResult.probability * 100).toFixed(0));
+        let diagnosis = topResult.className;
 
-        showStatus(`📸 Capturado: ${topResult.className} (${(topResult.probability * 100).toFixed(0)}%)`, 'success');
+        // Si la confianza es baja, es probable que sea hoja sana
+        if (topConfidence < 50) {
+          diagnosis = "✅ Hoja Sana (sin enfermedades detectadas)";
+        }
+
+        addToHistory(diagnosis, topConfidence.toFixed(0));
+
+        showStatus(`📸 Capturado: ${diagnosis} (${topConfidence.toFixed(0)}%)`, 'success');
 
         // Flash effect
         const container = document.getElementById('webcam-container');
