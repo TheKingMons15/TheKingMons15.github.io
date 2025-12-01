@@ -507,24 +507,67 @@
         model = await tmImage.load(modelURL, metadataURL);
         maxPredictions = model.getTotalClasses();
 
-        const flip = false;
-        const facingMode = useFrontCamera ? "user" : "environment";
+        // Solicitar permisos de cámara con mejor manejo
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              facingMode: useFrontCamera ? "user" : "environment",
+              width: { ideal: 1920, max: 4096 },
+              height: { ideal: 1920, max: 4096 }
+            }
+          });
 
-        webcam = new tmImage.Webcam(window.innerWidth, window.innerHeight, flip);
+          // Detener el stream de prueba
+          stream.getTracks().forEach(track => track.stop());
+        } catch (permError) {
+          throw new Error('Permiso de cámara denegado. Por favor, permite el acceso a la cámara.');
+        }
+
+        // Configurar webcam con mejores parámetros
+        const flip = useFrontCamera;
+        webcam = new tmImage.Webcam(
+          Math.min(window.innerWidth, 640),
+          Math.min(window.innerHeight, 640),
+          flip
+        );
+
+        // Configuración avanzada de cámara
         const constraints = {
-          facingMode: facingMode,
+          facingMode: useFrontCamera ? "user" : "environment",
           width: { ideal: 1920 },
-          height: { ideal: 1920 }
+          height: { ideal: 1920 },
+          aspectRatio: { ideal: 1 },
+          frameRate: { ideal: 30, max: 60 }
         };
 
         await webcam.setup(constraints);
+
+        // Verificar que la cámara esté lista
+        if (!webcam.webcam) {
+          throw new Error('No se pudo inicializar la cámara');
+        }
+
         await webcam.play();
 
-        isRunning = true;
-        window.requestAnimationFrame(loop);
+        // Verificar que esté reproduciendo
+        if (webcam.webcam.paused) {
+          await webcam.webcam.play();
+        }
 
-        document.getElementById("webcam-container").style.display = "block";
-        document.getElementById("webcam-container").appendChild(webcam.canvas);
+        isRunning = true;
+
+        // Añadir canvas al DOM
+        const container = document.getElementById("webcam-container");
+        container.innerHTML = ''; // Limpiar contenedor
+        container.appendChild(webcam.canvas);
+
+        // Ajustar canvas para pantalla completa
+        webcam.canvas.style.width = '100%';
+        webcam.canvas.style.height = '100%';
+        webcam.canvas.style.objectFit = 'cover';
+
+        // Mostrar elementos AR
+        container.style.display = "block";
         document.getElementById('scanFrame').style.display = 'block';
         document.getElementById('statusIndicator').style.display = 'flex';
         document.getElementById('arControls').style.display = 'flex';
@@ -532,55 +575,98 @@
 
         showLoading(false);
 
+        // Iniciar loop de predicción
+        window.requestAnimationFrame(loop);
+
       } catch (error) {
-        alert('Error: ' + error.message);
+        console.error('Error completo:', error);
+
+        let errorMessage = 'Error al iniciar la cámara: ';
+
+        if (error.name === 'NotAllowedError') {
+          errorMessage += 'Permiso de cámara denegado. Por favor, permite el acceso.';
+        } else if (error.name === 'NotFoundError') {
+          errorMessage += 'No se encontró ninguna cámara en el dispositivo.';
+        } else if (error.name === 'NotReadableError') {
+          errorMessage += 'La cámara está siendo usada por otra aplicación.';
+        } else if (error.message.includes('404')) {
+          errorMessage += 'No se pudo cargar el modelo. Verifica la URL.';
+        } else {
+          errorMessage += error.message;
+        }
+
+        alert(errorMessage);
         showLoading(false);
         document.getElementById('startScreen').style.display = 'flex';
+
+        // Limpiar recursos
+        if (webcam) {
+          try {
+            webcam.stop();
+          } catch (e) { }
+        }
       }
     }
 
     async function loop() {
       if (!isRunning) return;
-      webcam.update();
-      await predict();
+
+      try {
+        // Verificar que webcam esté activa
+        if (!webcam || !webcam.webcam || webcam.webcam.paused) {
+          console.warn('Webcam pausada, reiniciando...');
+          return;
+        }
+
+        await webcam.update();
+        await predict();
+
+      } catch (error) {
+        console.error('Error en loop:', error);
+      }
+
       window.requestAnimationFrame(loop);
     }
 
     async function predict() {
-      const prediction = await model.predict(webcam.canvas);
-      prediction.sort((a, b) => b.probability - a.probability);
+      try {
+        const prediction = await model.predict(webcam.canvas);
+        prediction.sort((a, b) => b.probability - a.probability);
 
-      const topResult = prediction[0];
-      const confidence = topResult.probability * 100;
-      const DETECTION_THRESHOLD = 50; // Solo muestra si supera 50%
+        const topResult = prediction[0];
+        const confidence = topResult.probability * 100;
+        const DETECTION_THRESHOLD = 50; // Solo muestra si supera 50%
 
-      // Limpiar timeout anterior
-      if (detectionTimeout) {
-        clearTimeout(detectionTimeout);
-      }
+        // Limpiar timeout anterior
+        if (detectionTimeout) {
+          clearTimeout(detectionTimeout);
+        }
 
-      if (confidence >= DETECTION_THRESHOLD) {
-        // Detección válida
-        showDiagnosis(topResult.className, confidence);
-        lastDetection = Date.now();
-
-        // Ocultar hint
-        document.getElementById('scanHint').style.display = 'none';
-      } else {
-        // Confianza baja - podría ser hoja sana
-        const allLow = prediction.every(p => p.probability * 100 < 50);
-
-        if (allLow) {
-          showDiagnosis('Hoja Sana', confidence);
+        if (confidence >= DETECTION_THRESHOLD) {
+          // Detección válida
+          showDiagnosis(topResult.className, confidence);
           lastDetection = Date.now();
+
+          // Ocultar hint
           document.getElementById('scanHint').style.display = 'none';
         } else {
-          // Ocultar diagnóstico después de 2 segundos sin detección
-          detectionTimeout = setTimeout(() => {
-            hideDiagnosis();
-            document.getElementById('scanHint').style.display = 'block';
-          }, 2000);
+          // Confianza baja - podría ser hoja sana
+          const allLow = prediction.every(p => p.probability * 100 < 50);
+
+          if (allLow) {
+            showDiagnosis('Hoja Sana', confidence);
+            lastDetection = Date.now();
+            document.getElementById('scanHint').style.display = 'none';
+          } else {
+            // Ocultar diagnóstico después de 2 segundos sin detección
+            detectionTimeout = setTimeout(() => {
+              hideDiagnosis();
+              document.getElementById('scanHint').style.display = 'block';
+            }, 2000);
+          }
         }
+      } catch (error) {
+        console.error('Error en predicción:', error);
       }
     }
 
@@ -647,27 +733,89 @@
 
     async function switchCamera() {
       if (!isRunning) return;
-      useFrontCamera = !useFrontCamera;
-      await stop();
-      setTimeout(() => init(), 500);
+
+      try {
+        // Cambiar modo de cámara
+        useFrontCamera = !useFrontCamera;
+
+        // Mostrar loading durante el cambio
+        showLoading(true);
+
+        // Detener cámara actual
+        if (webcam) {
+          webcam.stop();
+        }
+
+        // Limpiar elementos
+        document.getElementById("webcam-container").innerHTML = '';
+        document.getElementById('scanFrame').style.display = 'none';
+        document.getElementById('statusIndicator').style.display = 'none';
+        document.getElementById('arControls').style.display = 'none';
+        document.getElementById('arDiagnosis').style.display = 'none';
+        document.getElementById('scanHint').style.display = 'none';
+
+        isRunning = false;
+
+        // Pequeña pausa para liberar recursos
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        // Reiniciar con nueva cámara
+        await init();
+
+      } catch (error) {
+        console.error('Error al cambiar cámara:', error);
+        alert('No se pudo cambiar la cámara: ' + error.message);
+        showLoading(false);
+      }
     }
 
     async function stop() {
       if (!isRunning) return;
 
-      isRunning = false;
+      try {
+        isRunning = false;
 
-      if (webcam) {
-        webcam.stop();
+        // Detener webcam de forma segura
+        if (webcam) {
+          try {
+            webcam.stop();
+
+            // Detener todos los tracks del stream
+            if (webcam.webcam && webcam.webcam.srcObject) {
+              const tracks = webcam.webcam.srcObject.getTracks();
+              tracks.forEach(track => track.stop());
+            }
+          } catch (e) {
+            console.warn('Error al detener webcam:', e);
+          }
+
+          webcam = null;
+        }
+
+        // Limpiar el contenedor
+        const container = document.getElementById("webcam-container");
+        container.innerHTML = '';
+        container.style.display = "none";
+
+        // Ocultar todos los elementos AR
+        document.getElementById('scanFrame').style.display = 'none';
+        document.getElementById('statusIndicator').style.display = 'none';
+        document.getElementById('arControls').style.display = 'none';
+        document.getElementById('arDiagnosis').style.display = 'none';
+        document.getElementById('scanHint').style.display = 'none';
+
+        // Limpiar timeout
+        if (detectionTimeout) {
+          clearTimeout(detectionTimeout);
+          detectionTimeout = null;
+        }
+
+        // Volver a pantalla de inicio
+        document.getElementById('startScreen').style.display = 'flex';
+
+      } catch (error) {
+        console.error('Error al detener:', error);
       }
-
-      document.getElementById("webcam-container").style.display = "none";
-      document.getElementById('scanFrame').style.display = 'none';
-      document.getElementById('statusIndicator').style.display = 'none';
-      document.getElementById('arControls').style.display = 'none';
-      document.getElementById('arDiagnosis').style.display = 'none';
-      document.getElementById('scanHint').style.display = 'none';
-      document.getElementById('startScreen').style.display = 'flex';
     }
 
     function showLoading(show) {
