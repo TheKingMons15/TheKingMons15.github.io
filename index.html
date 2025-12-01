@@ -332,6 +332,11 @@
       transform: scale(1.02);
     }
 
+    .prediction-name.low-confidence {
+      color: #999;
+      font-style: italic;
+    }
+
     .prediction-name {
       font-weight: bold;
       color: #333;
@@ -678,6 +683,7 @@
       prediction.sort((a, b) => b.probability - a.probability);
 
       let maxConfidence = 0;
+      const CONFIDENCE_THRESHOLD = 60; // Umbral mínimo de confianza (ajústalo: 50-80)
 
       for (let i = 0; i < maxPredictions; i++) {
         const probability = prediction[i].probability * 100;
@@ -689,11 +695,21 @@
 
         const predDiv = labelContainer.childNodes[i];
         predDiv.className = isTop ? "prediction top" : "prediction";
+
+        // Mostrar resultado solo si supera el umbral
+        let displayText = prediction[i].className;
+        let confidenceClass = "";
+
+        if (isTop && probability < CONFIDENCE_THRESHOLD) {
+          displayText = "🔍 Analizando...";
+          confidenceClass = "low-confidence";
+        }
+
         predDiv.innerHTML = `
                     <div class="prediction-content">
-                        <span class="prediction-name">
+                        <span class="prediction-name ${confidenceClass}">
                             <span class="prediction-icon">${icons[i % icons.length]}</span>
-                            ${prediction[i].className}
+                            ${displayText}
                         </span>
                         <span class="prediction-value">${probability.toFixed(0)}%</span>
                     </div>
@@ -701,7 +717,17 @@
                 `;
       }
 
-      document.getElementById('confidence').textContent = maxConfidence.toFixed(0) + '%';
+      // Actualizar confianza con indicador visual
+      const confidenceEl = document.getElementById('confidence');
+      confidenceEl.textContent = maxConfidence.toFixed(0) + '%';
+
+      if (maxConfidence >= 80) {
+        confidenceEl.style.color = '#10b981'; // Verde
+      } else if (maxConfidence >= 60) {
+        confidenceEl.style.color = '#f59e0b'; // Amarillo
+      } else {
+        confidenceEl.style.color = '#ef4444'; // Rojo
+      }
     }
 
     function capture() {
