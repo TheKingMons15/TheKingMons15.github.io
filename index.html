@@ -1,17 +1,306 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rTMS - Estimulación Magnética Transcraneal Repetitiva</title>
+    <link rel="stylesheet" href="css/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <title>LexBen Dashboard</title>
-    <script type="module" crossorigin src="/assets/index-BuUc6cTn.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-BlBcwyQ8.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- Header / Navbar -->
+    <header class="navbar">
+        <div class="container navbar-content">
+            <div class="logo-wrapper">
+                <img src="img/logo.png" alt="Logo Clínica" class="logo">
+            </div>
+            <nav class="nav-menu">
+                <a href="#inicio" class="nav-link">Inicio</a>
+                <a href="#tecnologia" class="nav-link">Tecnología</a>
+                <a href="#beneficios" class="nav-link">Beneficios</a>
+                <a href="#contacto" class="nav-link">Contacto</a>
+                <a href="brochure.html" class="nav-link btn-brochure">📄 Brochure</a>
+            </nav>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="hero-bg-gradient"></div>
+        <div class="container hero-content">
+            <div class="hero-text">
+                <div class="badge">
+                    <span class="badge-dot"></span>
+                    Tecnología médica avanzada
+                </div>
+                <h1 class="hero-title">
+                    Estimulación Magnética
+                    <span class="text-gradient">Transcraneal Repetitiva</span>
+                    (rTMS)
+                </h1>
+                <p class="hero-description">
+                    Tratamiento innovador no invasivo para trastornos neurológicos
+                    y psiquiátricos. Tecnología de vanguardia respaldada por
+                    evidencia científica.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#contacto" class="btn btn-primary">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                        </svg>
+                        WhatsApp: 098 401 7341
+                    </a>
+                    <a href="brochure.html" class="btn btn-secondary">
+                        Ver Brochure Digital
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">FDA</span>
+                        <span class="stat-label">Aprobado</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-number">No Invasivo</span>
+                        <span class="stat-label">Tratamiento seguro</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-number">+95%</span>
+                        <span class="stat-label">Satisfacción</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="image-card">
+                    <div class="image-glow"></div>
+                    <img src="img/rtms-machine.png" alt="Equipo rTMS - Estimulación Magnética Transcraneal"
+                        class="machine-img">
+                    <div class="image-badge">
+                        <span class="pulse-dot"></span>
+                        Equipo Certificado
+                    </div>
+                </div>
+                <!-- Floating Cards -->
+                <div class="floating-card card-1">
+                    <div class="floating-icon">🧠</div>
+                    <span>Neuromodulación</span>
+                </div>
+                <div class="floating-card card-2">
+                    <div class="floating-icon">✓</div>
+                    <span>Sin dolor</span>
+                </div>
+                <div class="floating-card card-3">
+                    <div class="floating-icon">⚡</div>
+                    <span>Resultados rápidos</span>
+                </div>
+            </div>
+        </div>
+        <!-- Wave Decoration -->
+        <div class="hero-wave">
+            <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z"
+                    fill="white" />
+            </svg>
+        </div>
+    </section>
+
+    <!-- Tecnología Section -->
+    <section class="section-technology" id="tecnologia">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Tecnología</span>
+                <h2 class="section-title">¿Qué es la rTMS?</h2>
+                <p class="section-subtitle">
+                    La Estimulación Magnética Transcraneal Repetitiva es una técnica
+                    neurofisiológica que permite modular la actividad cerebral de forma segura.
+                </p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon icon-brain">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path
+                                d="M12 2a9 9 0 0 1 9 9c0 3.1-1.6 5.8-4 7.4V21a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-2.6C4.6 16.8 3 14.1 3 11a9 9 0 0 1 9-9z" />
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Neuromodulación</h3>
+                    <p class="feature-text">
+                        Estimulación precisa de áreas cerebrales específicas para
+                        regular la actividad neuronal.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon icon-shield">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">100% Seguro</h3>
+                    <p class="feature-text">
+                        Procedimiento no invasivo, sin anestesia, sin efectos
+                        secundarios significativos.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon icon-clock">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M12 6v6l4 2" />
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Sesiones Cortas</h3>
+                    <p class="feature-text">
+                        Tratamientos de 20-40 minutos que permiten continuar
+                        con actividades normales.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon icon-check">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                            <path d="M22 4L12 14.01l-3-3" />
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Evidencia Científica</h3>
+                    <p class="feature-text">
+                        Respaldado por estudios clínicos y aprobado por
+                        organismos regulatorios internacionales.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Beneficios Section -->
+    <section class="section-benefits" id="beneficios">
+        <div class="container">
+            <div class="benefits-content">
+                <div class="benefits-text">
+                    <span class="section-badge badge-light">Aplicaciones</span>
+                    <h2 class="section-title text-white">Condiciones Tratadas</h2>
+                    <ul class="benefits-list">
+                        <li class="benefit-item">
+                            <span class="benefit-check">✓</span>
+                            <div>
+                                <strong>Depresión resistente</strong>
+                                <p>Cuando los medicamentos no son suficientes</p>
+                            </div>
+                        </li>
+                        <li class="benefit-item">
+                            <span class="benefit-check">✓</span>
+                            <div>
+                                <strong>Trastornos de ansiedad</strong>
+                                <p>Ansiedad generalizada y pánico</p>
+                            </div>
+                        </li>
+                        <li class="benefit-item">
+                            <span class="benefit-check">✓</span>
+                            <div>
+                                <strong>TOC</strong>
+                                <p>Trastorno obsesivo-compulsivo</p>
+                            </div>
+                        </li>
+                        <li class="benefit-item">
+                            <span class="benefit-check">✓</span>
+                            <div>
+                                <strong>Dolor crónico</strong>
+                                <p>Fibromialgia y migrañas</p>
+                            </div>
+                        </li>
+                        <li class="benefit-item">
+                            <span class="benefit-check">✓</span>
+                            <div>
+                                <strong>Rehabilitación neurológica</strong>
+                                <p>Post-ACV y lesiones cerebrales</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="benefits-image">
+                    <div class="benefits-card">
+                        <img src="img/rtms-machine.png" alt="Equipo rTMS" class="benefits-machine">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section-cta" id="contacto">
+        <div class="container">
+            <div class="cta-card">
+                <div class="cta-content">
+                    <h2 class="cta-title">¿Listo para comenzar tu tratamiento?</h2>
+                    <p class="cta-text">
+                        Agenda tu consulta de evaluación y descubre cómo la rTMS
+                        puede ayudarte a mejorar tu calidad de vida.
+                    </p>
+                    <div class="cta-buttons">
+                        <a href="https://wa.me/5930984017341" class="btn btn-whatsapp" target="_blank">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                            </svg>
+                            WhatsApp: 098 401 7341
+                        </a>
+                        <a href="brochure.html" class="btn btn-outline-white">
+                            Abrir Brochure
+                        </a>
+                    </div>
+                </div>
+                <div class="cta-decoration">
+                    <div class="decoration-circle circle-1"></div>
+                    <div class="decoration-circle circle-2"></div>
+                    <div class="decoration-circle circle-3"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="img/logo.png" alt="Logo" class="footer-logo">
+                    <p class="footer-text">
+                        Tecnología médica avanzada para el tratamiento
+                        de trastornos neurológicos y psiquiátricos.
+                    </p>
+                </div>
+                <div class="footer-links">
+                    <h4>Enlaces</h4>
+                    <a href="#inicio">Inicio</a>
+                    <a href="#tecnologia">Tecnología</a>
+                    <a href="#beneficios">Beneficios</a>
+                    <a href="brochure.html">Brochure</a>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contacto</h4>
+                    <p>📱 WhatsApp: 098 401 7341</p>
+                    <p>📧 info@clinica.com</p>
+                    <p>📍 Tu ciudad, Ecuador</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Clínica rTMS. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+
 </html>
