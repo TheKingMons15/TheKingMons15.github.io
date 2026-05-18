@@ -36,17 +36,24 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--bg-primary)" }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "#f8fafc" }}>
         <div className="text-center">
           <div
-            className="w-12 h-12 rounded-full border-2 border-blue-500 border-t-transparent mx-auto mb-4"
-            style={{ animation: "spin 0.8s linear infinite" }}
+            className="w-16 h-16 rounded-2xl overflow-hidden mx-auto mb-4"
+            style={{ border: "1px solid #e2e8f0", boxShadow: "0 4px 12px rgba(0,0,0,0.08)", padding: "6px" }}
+          >
+            <img src="/img/logo.png" alt="Neurotec" className="w-full h-full object-contain" />
+          </div>
+          <div
+            className="w-8 h-8 rounded-full border-2 border-t-transparent mx-auto mb-3"
+            style={{ borderColor: "#3b82f6", borderTopColor: "transparent", animation: "spin 0.8s linear infinite" }}
           />
-          <p style={{ color: "var(--text-secondary)" }}>Cargando sistema...</p>
+          <p className="text-sm font-medium" style={{ color: "#64748b" }}>Cargando...</p>
         </div>
       </div>
     );
   }
+
 
   return (
     <div className="min-h-screen" style={{ background: "var(--bg-primary)" }}>
