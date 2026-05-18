@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { createClient } from "@/lib/supabase/client";
 import toast from "react-hot-toast";
-import { Mail, ArrowLeft, Zap, Send } from "lucide-react";
+import { Mail, ArrowLeft, Send } from "lucide-react";
 import Link from "next/link";
 
 export default function ForgotPasswordPage() {
@@ -16,124 +16,139 @@ export default function ForgotPasswordPage() {
   const handleReset = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/reset-password`,
+      redirectTo: `${window.location.origin}/auth/callback`,
     });
-
-    if (error) {
-      toast.error("Error al enviar el correo. Verifica el email.");
-    } else {
-      setSent(true);
-      toast.success("Correo de recuperación enviado");
-    }
-
+    if (error) toast.error("Error al enviar el correo. Verifica el email.");
+    else { setSent(true); toast.success("Correo de recuperación enviado"); }
     setLoading(false);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse at 20% 50%, rgba(59,130,246,0.08) 0%, transparent 60%)",
-        }}
-      />
-
+    <div
+      className="min-h-screen flex items-center justify-center p-6"
+      style={{ background: "var(--bg)" }}
+    >
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
+        initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md relative z-10"
+        transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+        className="w-full max-w-sm"
       >
-        <div className="text-center mb-8">
-          <div
-            className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4"
-            style={{ background: "linear-gradient(135deg, #3b82f6, #8b5cf6)", boxShadow: "0 0 30px rgba(59,130,246,0.4)" }}
-          >
-            <Zap size={28} className="text-white" />
+        {/* Logo */}
+        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "32px" }}>
+          <div style={{
+            width: "40px", height: "40px", borderRadius: "12px",
+            overflow: "hidden", padding: "5px",
+            background: "white", border: "1px solid var(--border)",
+            boxShadow: "var(--shadow-sm)",
+          }}>
+            <img src="/img/logo.png" alt="Neurotec" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
           </div>
-          <h1 className="text-2xl font-bold" style={{ color: "var(--text-primary)" }}>
-            Recuperar Contraseña
-          </h1>
+          <p style={{ fontSize: "15px", fontWeight: 700, color: "var(--text-primary)" }}>
+            Neurotec CRM
+          </p>
         </div>
 
-        <div
-          className="glass rounded-2xl p-8"
-          style={{ boxShadow: "0 25px 50px rgba(0,0,0,0.5)" }}
-        >
+        {/* Card */}
+        <div style={{
+          background: "rgba(255,255,255,0.88)",
+          backdropFilter: "blur(40px)",
+          WebkitBackdropFilter: "blur(40px)",
+          border: "1px solid rgba(255,255,255,0.9)",
+          borderRadius: "var(--r-xl)",
+          padding: "32px",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.1), 0 0 0 0.5px rgba(0,0,0,0.06)",
+        }}>
           {sent ? (
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="text-center"
+              style={{ textAlign: "center" }}
             >
-              <div
-                className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
-                style={{ background: "rgba(16,185,129,0.15)", border: "1px solid rgba(16,185,129,0.3)" }}
-              >
-                <Send size={24} style={{ color: "var(--accent-emerald)" }} />
+              <div style={{
+                width: "56px", height: "56px", borderRadius: "16px",
+                background: "var(--green-bg)", border: "1px solid rgba(52,199,89,0.2)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                margin: "0 auto 16px",
+              }}>
+                <Send size={22} style={{ color: "var(--green)" }} />
               </div>
-              <h3 className="text-lg font-semibold mb-2" style={{ color: "var(--text-primary)" }}>
-                ¡Correo enviado!
-              </h3>
-              <p className="text-sm mb-6" style={{ color: "var(--text-secondary)" }}>
+              <h2 style={{ fontSize: "18px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px" }}>
+                Correo enviado
+              </h2>
+              <p style={{ fontSize: "14px", color: "var(--text-secondary)", marginBottom: "24px", lineHeight: 1.6 }}>
                 Revisa tu bandeja de entrada y sigue las instrucciones para restablecer tu contraseña.
               </p>
               <Link
                 href="/acceso"
-                className="text-sm font-medium"
-                style={{ color: "var(--accent-blue-light)" }}
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: "6px",
+                  fontSize: "14px", fontWeight: 600, color: "var(--accent)",
+                  textDecoration: "none",
+                }}
               >
-                Volver al login
+                <ArrowLeft size={14} /> Volver al inicio de sesión
               </Link>
             </motion.div>
           ) : (
-            <form onSubmit={handleReset} className="space-y-5">
-              <p className="text-sm mb-4" style={{ color: "var(--text-secondary)" }}>
-                Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.
+            <>
+              <h2 style={{ fontSize: "22px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "6px" }}>
+                Recuperar contraseña
+              </h2>
+              <p style={{ fontSize: "14px", color: "var(--text-secondary)", marginBottom: "24px", lineHeight: 1.6 }}>
+                Ingresa tu correo y te enviaremos un enlace para restablecer tu contraseña.
               </p>
-              <div>
-                <label className="block text-sm font-medium mb-2" style={{ color: "var(--text-secondary)" }}>
-                  Correo electrónico
-                </label>
-                <div className="relative">
-                  <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "var(--text-muted)" }} />
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    placeholder="usuario@neurotec.com"
-                    className="w-full pl-10 pr-4 py-3 rounded-xl text-sm outline-none transition-all"
-                    style={{
-                      background: "rgba(255,255,255,0.04)",
-                      border: "1px solid var(--border-glass)",
-                      color: "var(--text-primary)",
-                    }}
-                  />
+
+              <form onSubmit={handleReset} style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+                <div>
+                  <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "var(--text-secondary)", marginBottom: "7px" }}>
+                    Correo electrónico
+                  </label>
+                  <div style={{ position: "relative" }}>
+                    <Mail size={15} style={{
+                      position: "absolute", left: "13px", top: "50%",
+                      transform: "translateY(-50%)", color: "var(--text-muted)", pointerEvents: "none",
+                    }} />
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      placeholder="nombre@neurotec.com"
+                      className="input-base"
+                      style={{ paddingLeft: "40px" }}
+                    />
+                  </div>
                 </div>
-              </div>
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all"
-                style={{
-                  background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
-                  color: "white",
-                  boxShadow: "0 4px 15px rgba(59,130,246,0.4)",
-                }}
-              >
-                {loading ? "Enviando..." : "Enviar enlace de recuperación"}
-              </button>
-              <Link
-                href="/acceso"
-                className="flex items-center gap-2 text-sm justify-center transition-colors"
-                style={{ color: "var(--text-muted)" }}
-              >
-                <ArrowLeft size={14} /> Volver al login
-              </Link>
-            </form>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="btn-primary"
+                  style={{
+                    width: "100%", padding: "13px",
+                    borderRadius: "var(--r-full)", fontSize: "14px",
+                    opacity: loading ? 0.7 : 1, cursor: loading ? "not-allowed" : "pointer",
+                    marginTop: "4px",
+                  }}
+                >
+                  {loading ? "Enviando..." : "Enviar enlace de recuperación"}
+                </button>
+
+                <Link
+                  href="/acceso"
+                  style={{
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    gap: "6px", fontSize: "13px", fontWeight: 500,
+                    color: "var(--text-secondary)", textDecoration: "none",
+                    paddingTop: "4px",
+                  }}
+                >
+                  <ArrowLeft size={13} /> Volver al inicio de sesión
+                </Link>
+              </form>
+            </>
           )}
         </div>
       </motion.div>
