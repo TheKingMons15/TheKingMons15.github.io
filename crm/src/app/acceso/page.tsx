@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { createClient } from "@/lib/supabase/client";
 import toast from "react-hot-toast";
-import { Eye, EyeOff, ArrowRight, Lock, Mail } from "lucide-react";
+import { Eye, EyeOff, ArrowRight, Lock, Mail, CheckCircle } from "lucide-react";
 
 export default function AccesoPage() {
   const [email, setEmail] = useState("");
@@ -24,224 +24,284 @@ export default function AccesoPage() {
     setLoading(false);
   };
 
+  const features = [
+    "Dashboard con métricas en tiempo real",
+    "Gestión completa del ciclo de ventas",
+    "Reportes diarios por vendedor",
+    "Historial de seguimientos y contactos",
+  ];
+
   return (
-    <div className="min-h-screen flex items-center justify-center p-6" style={{ background: "var(--bg)" }}>
-      {/* Fondo decorativo estilo macOS */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+    <div style={{ display: "flex", height: "100vh", overflow: "hidden" }}>
+
+      {/* ── LADO IZQUIERDO — Azul ───────────────────────────────── */}
+      <motion.div
+        initial={{ x: -40, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          padding: "48px",
+          background: "linear-gradient(160deg, #0057c2 0%, #003a8c 50%, #00256e 100%)",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        {/* Círculos decorativos */}
         <div style={{
-          position: "absolute", top: "-20%", left: "-10%",
-          width: "60vw", height: "60vw",
-          background: "radial-gradient(circle, rgba(0,113,227,0.07) 0%, transparent 70%)",
-          borderRadius: "50%",
+          position: "absolute", top: "-80px", right: "-80px",
+          width: "320px", height: "320px", borderRadius: "50%",
+          background: "rgba(255,255,255,0.05)",
+          pointerEvents: "none",
         }} />
         <div style={{
-          position: "absolute", bottom: "-10%", right: "-5%",
-          width: "50vw", height: "50vw",
-          background: "radial-gradient(circle, rgba(175,82,222,0.05) 0%, transparent 70%)",
-          borderRadius: "50%",
+          position: "absolute", bottom: "-60px", left: "-60px",
+          width: "280px", height: "280px", borderRadius: "50%",
+          background: "rgba(255,255,255,0.04)",
+          pointerEvents: "none",
         }} />
-      </div>
+        <div style={{
+          position: "absolute", top: "40%", right: "10%",
+          width: "140px", height: "140px", borderRadius: "50%",
+          background: "rgba(255,255,255,0.04)",
+          pointerEvents: "none",
+        }} />
 
-      <div className="w-full max-w-5xl relative z-10 flex gap-6 items-center">
-
-        {/* Panel izquierdo — info */}
+        {/* Logo + nombre */}
         <motion.div
-          initial={{ opacity: 0, x: -24 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="hidden lg:flex flex-col justify-between flex-1 rounded-3xl p-10 overflow-hidden relative"
-          style={{
-            background: "linear-gradient(145deg, #0f0f1a 0%, #0d1b2e 50%, #0a1628 100%)",
-            minHeight: "580px",
-            boxShadow: "var(--shadow-xl)",
-          }}
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          style={{ display: "flex", alignItems: "center", gap: "14px", position: "relative", zIndex: 1 }}
         >
-          {/* Textura sutil */}
           <div style={{
-            position: "absolute", inset: 0,
-            backgroundImage: "radial-gradient(circle at 30% 20%, rgba(0,113,227,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(175,82,222,0.1) 0%, transparent 50%)",
-          }} />
-
-          {/* Logo + nombre */}
-          <div className="relative z-10 flex items-center gap-3">
-            <motion.div
-              initial={{ scale: 0, rotate: -10 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ delay: 0.2, type: "spring", stiffness: 200, damping: 15 }}
-              className="w-11 h-11 rounded-2xl overflow-hidden flex items-center justify-center"
-              style={{ background: "white", padding: "5px", boxShadow: "0 4px 16px rgba(0,113,227,0.4)" }}
-            >
-              <img src="/img/logo.png" alt="Neurotec" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
-            </motion.div>
-            <div>
-              <p style={{ color: "white", fontWeight: 700, fontSize: "16px" }}>Neurotec CRM</p>
-              <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px" }}>Sistema Interno</p>
-            </div>
+            width: "52px", height: "52px", borderRadius: "16px",
+            background: "white", padding: "7px",
+            boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
+            flexShrink: 0,
+          }}>
+            <img src="/img/logo.png" alt="Neurotec" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
           </div>
-
-          {/* Headline */}
-          <div className="relative z-10">
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
-              style={{ color: "white", fontSize: "36px", fontWeight: 800, lineHeight: 1.15, marginBottom: "16px" }}
-            >
-              Gestiona tus ventas con precisión.
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.5 }}
-              style={{ color: "rgba(255,255,255,0.5)", fontSize: "15px", lineHeight: 1.6 }}
-            >
-              Seguimiento de clientes, reportes diarios y estadísticas en tiempo real para todo tu equipo.
-            </motion.p>
-          </div>
-
-          {/* Feature pills */}
-          <div className="relative z-10 flex flex-col gap-3">
-            {[
-              { icon: "📊", text: "Dashboard con métricas en tiempo real" },
-              { icon: "👥", text: "CRM completo de clientes" },
-              { icon: "📋", text: "Reportes diarios automáticos" },
-            ].map((f, i) => (
-              <motion.div
-                key={f.text}
-                initial={{ opacity: 0, x: -16 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.5 + i * 0.1 }}
-                className="flex items-center gap-3 px-4 py-3 rounded-2xl"
-                style={{ background: "rgba(255,255,255,0.06)", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,0.08)" }}
-              >
-                <span style={{ fontSize: "18px" }}>{f.icon}</span>
-                <span style={{ color: "rgba(255,255,255,0.75)", fontSize: "13px", fontWeight: 500 }}>{f.text}</span>
-              </motion.div>
-            ))}
+          <div>
+            <p style={{ color: "white", fontWeight: 800, fontSize: "20px", lineHeight: 1.2 }}>
+              Neurotec CRM
+            </p>
+            <p style={{ color: "rgba(255,255,255,0.55)", fontSize: "13px", marginTop: "2px" }}>
+              Sistema Administrativo
+            </p>
           </div>
         </motion.div>
 
-        {/* Panel derecho — formulario */}
+        {/* Headline central */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="w-full lg:w-[400px] flex-shrink-0"
+          transition={{ delay: 0.3, duration: 0.5 }}
+          style={{ position: "relative", zIndex: 1 }}
         >
-          {/* Card del formulario */}
-          <div
-            className="rounded-3xl p-8"
-            style={{
-              background: "rgba(255,255,255,0.88)",
-              backdropFilter: "blur(40px)",
-              WebkitBackdropFilter: "blur(40px)",
-              border: "1px solid rgba(255,255,255,0.9)",
-              boxShadow: "0 32px 80px rgba(0,0,0,0.1), 0 0 0 0.5px rgba(0,0,0,0.06)",
-            }}
-          >
-            {/* Mobile logo */}
-            <div className="flex lg:hidden items-center gap-2 mb-6">
-              <div className="w-8 h-8 rounded-xl overflow-hidden" style={{ border: "1px solid var(--border)", padding: "3px" }}>
-                <img src="/img/logo.png" alt="Neurotec" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
-              </div>
-              <span style={{ fontWeight: 700, color: "var(--text-primary)", fontSize: "15px" }}>Neurotec CRM</span>
-            </div>
-
-            <h2 style={{ fontSize: "24px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "6px" }}>
-              Iniciar sesión
-            </h2>
-            <p style={{ fontSize: "14px", color: "var(--text-secondary)", marginBottom: "28px" }}>
-              Accede a tu cuenta para continuar
-            </p>
-
-            <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
-              {/* Email */}
-              <div>
-                <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "var(--text-secondary)", marginBottom: "7px" }}>
-                  Correo electrónico
-                </label>
-                <div style={{ position: "relative" }}>
-                  <Mail size={15} style={{ position: "absolute", left: "13px", top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)", pointerEvents: "none" }} />
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    placeholder="nombre@neurotec.com"
-                    className="input-base"
-                    style={{ paddingLeft: "40px" }}
-                  />
-                </div>
-              </div>
-
-              {/* Password */}
-              <div>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "7px" }}>
-                  <label style={{ fontSize: "13px", fontWeight: 600, color: "var(--text-secondary)" }}>
-                    Contraseña
-                  </label>
-                  <a href="/forgot-password" style={{ fontSize: "12px", color: "var(--accent)", fontWeight: 500, textDecoration: "none" }}>
-                    ¿Olvidaste tu contraseña?
-                  </a>
-                </div>
-                <div style={{ position: "relative" }}>
-                  <Lock size={15} style={{ position: "absolute", left: "13px", top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)", pointerEvents: "none" }} />
-                  <input
-                    type={showPwd ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    placeholder="••••••••••"
-                    className="input-base"
-                    style={{ paddingLeft: "40px", paddingRight: "42px" }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPwd(!showPwd)}
-                    style={{ position: "absolute", right: "12px", top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)", background: "none", border: "none", cursor: "pointer", padding: "2px" }}
-                  >
-                    {showPwd ? <EyeOff size={15} /> : <Eye size={15} />}
-                  </button>
-                </div>
-              </div>
-
-              {/* Submit */}
-              <motion.button
-                type="submit"
-                disabled={loading}
-                whileHover={{ scale: loading ? 1 : 1.015 }}
-                whileTap={{ scale: loading ? 1 : 0.985 }}
-                className="btn-primary"
-                style={{
-                  width: "100%",
-                  padding: "13px",
-                  fontSize: "15px",
-                  marginTop: "6px",
-                  borderRadius: "var(--r-full)",
-                  opacity: loading ? 0.7 : 1,
-                  cursor: loading ? "not-allowed" : "pointer",
-                }}
-              >
-                {loading ? (
-                  <>
-                    <div style={{ width: "16px", height: "16px", borderRadius: "50%", border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "white", animation: "spin 0.8s linear infinite" }} />
-                    Ingresando...
-                  </>
-                ) : (
-                  <>
-                    Ingresar
-                    <ArrowRight size={16} />
-                  </>
-                )}
-              </motion.button>
-            </form>
-          </div>
-
-          <p style={{ textAlign: "center", fontSize: "12px", color: "var(--text-muted)", marginTop: "20px" }}>
-            © 2024 Neurotec Ecuador · Sistema Interno
+          <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "13px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "16px" }}>
+            Plataforma de Ventas
+          </p>
+          <h1 style={{
+            color: "white", fontSize: "42px", fontWeight: 800,
+            lineHeight: 1.12, marginBottom: "20px",
+          }}>
+            Controla cada venta con precisión.
+          </h1>
+          <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "16px", lineHeight: 1.65, maxWidth: "420px" }}>
+            Una herramienta diseñada para que tu equipo de ventas trabaje de forma organizada, medible y eficiente.
           </p>
         </motion.div>
-      </div>
+
+        {/* Features list */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.45 }}
+          style={{ display: "flex", flexDirection: "column", gap: "12px", position: "relative", zIndex: 1 }}
+        >
+          {features.map((f, i) => (
+            <motion.div
+              key={f}
+              initial={{ opacity: 0, x: -12 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.5 + i * 0.08 }}
+              style={{ display: "flex", alignItems: "center", gap: "10px" }}
+            >
+              <div style={{
+                width: "20px", height: "20px", borderRadius: "50%",
+                background: "rgba(255,255,255,0.15)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                flexShrink: 0,
+              }}>
+                <CheckCircle size={12} color="white" />
+              </div>
+              <span style={{ color: "rgba(255,255,255,0.8)", fontSize: "14px", fontWeight: 500 }}>
+                {f}
+              </span>
+            </motion.div>
+          ))}
+        </motion.div>
+      </motion.div>
+
+      {/* ── LADO DERECHO — Blanco ──────────────────────────────── */}
+      <motion.div
+        initial={{ x: 40, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
+        style={{
+          width: "480px",
+          flexShrink: 0,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          padding: "60px 52px",
+          background: "white",
+          borderLeft: "1px solid rgba(0,0,0,0.06)",
+        }}
+      >
+        <div style={{ maxWidth: "340px", width: "100%" }}>
+          {/* Bienvenida */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25 }}
+            style={{ marginBottom: "36px" }}
+          >
+            <h2 style={{ fontSize: "28px", fontWeight: 800, color: "#0f172a", marginBottom: "8px", lineHeight: 1.2 }}>
+              Bienvenido
+            </h2>
+            <p style={{ fontSize: "15px", color: "#64748b", lineHeight: 1.6 }}>
+              Ingresa tus credenciales para acceder al sistema
+            </p>
+          </motion.div>
+
+          {/* Formulario */}
+          <motion.form
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.35 }}
+            onSubmit={handleLogin}
+            style={{ display: "flex", flexDirection: "column", gap: "18px" }}
+          >
+            {/* Email */}
+            <div>
+              <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "8px" }}>
+                Correo electrónico
+              </label>
+              <div style={{ position: "relative" }}>
+                <Mail size={15} style={{
+                  position: "absolute", left: "14px", top: "50%",
+                  transform: "translateY(-50%)", color: "#9ca3af", pointerEvents: "none",
+                }} />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  placeholder="nombre@neurotec.com"
+                  style={{
+                    width: "100%", paddingLeft: "42px", paddingRight: "16px",
+                    paddingTop: "12px", paddingBottom: "12px",
+                    background: "#f8fafc", border: "1.5px solid #e2e8f0",
+                    borderRadius: "12px", fontSize: "14px", color: "#0f172a",
+                    outline: "none", transition: "border-color 0.15s, box-shadow 0.15s",
+                    fontFamily: "inherit",
+                  }}
+                  onFocus={(e) => { e.target.style.borderColor = "#0071e3"; e.target.style.boxShadow = "0 0 0 3px rgba(0,113,227,0.1)"; e.target.style.background = "white"; }}
+                  onBlur={(e) => { e.target.style.borderColor = "#e2e8f0"; e.target.style.boxShadow = "none"; e.target.style.background = "#f8fafc"; }}
+                />
+              </div>
+            </div>
+
+            {/* Password */}
+            <div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+                <label style={{ fontSize: "13px", fontWeight: 600, color: "#374151" }}>
+                  Contraseña
+                </label>
+                <a href="/forgot-password" style={{ fontSize: "12px", color: "#0071e3", fontWeight: 500, textDecoration: "none" }}>
+                  ¿Olvidaste tu contraseña?
+                </a>
+              </div>
+              <div style={{ position: "relative" }}>
+                <Lock size={15} style={{
+                  position: "absolute", left: "14px", top: "50%",
+                  transform: "translateY(-50%)", color: "#9ca3af", pointerEvents: "none",
+                }} />
+                <input
+                  type={showPwd ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  placeholder="••••••••••"
+                  style={{
+                    width: "100%", paddingLeft: "42px", paddingRight: "44px",
+                    paddingTop: "12px", paddingBottom: "12px",
+                    background: "#f8fafc", border: "1.5px solid #e2e8f0",
+                    borderRadius: "12px", fontSize: "14px", color: "#0f172a",
+                    outline: "none", transition: "border-color 0.15s, box-shadow 0.15s",
+                    fontFamily: "inherit",
+                  }}
+                  onFocus={(e) => { e.target.style.borderColor = "#0071e3"; e.target.style.boxShadow = "0 0 0 3px rgba(0,113,227,0.1)"; e.target.style.background = "white"; }}
+                  onBlur={(e) => { e.target.style.borderColor = "#e2e8f0"; e.target.style.boxShadow = "none"; e.target.style.background = "#f8fafc"; }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPwd(!showPwd)}
+                  style={{
+                    position: "absolute", right: "12px", top: "50%",
+                    transform: "translateY(-50%)", color: "#9ca3af",
+                    background: "none", border: "none", cursor: "pointer",
+                  }}
+                >
+                  {showPwd ? <EyeOff size={15} /> : <Eye size={15} />}
+                </button>
+              </div>
+            </div>
+
+            {/* Botón */}
+            <motion.button
+              type="submit"
+              disabled={loading}
+              whileHover={{ scale: loading ? 1 : 1.015, boxShadow: loading ? undefined : "0 8px 24px rgba(0,86,185,0.4)" }}
+              whileTap={{ scale: loading ? 1 : 0.985 }}
+              style={{
+                width: "100%", padding: "13px 24px",
+                background: loading ? "#93c5fd" : "linear-gradient(135deg, #0071e3 0%, #0056b9 100%)",
+                color: "white", fontWeight: 700, fontSize: "15px",
+                border: "none", borderRadius: "999px",
+                cursor: loading ? "not-allowed" : "pointer",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                gap: "8px", marginTop: "4px",
+                boxShadow: "0 4px 16px rgba(0,113,227,0.3)",
+                fontFamily: "inherit",
+                transition: "background 0.15s",
+              }}
+            >
+              {loading ? (
+                <>
+                  <div style={{
+                    width: "16px", height: "16px", borderRadius: "50%",
+                    border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "white",
+                    animation: "spin 0.8s linear infinite",
+                  }} />
+                  Ingresando...
+                </>
+              ) : (
+                <>Ingresar <ArrowRight size={16} /></>
+              )}
+            </motion.button>
+          </motion.form>
+
+          <p style={{ textAlign: "center", fontSize: "12px", color: "#94a3b8", marginTop: "32px" }}>
+            © 2024 Neurotec Ecuador · Sistema Interno
+          </p>
+        </div>
+      </motion.div>
     </div>
   );
 }

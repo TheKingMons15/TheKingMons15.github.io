@@ -56,18 +56,21 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
 
 
   return (
-    <div className="min-h-screen" style={{ background: "var(--bg-primary)" }}>
+    <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
       <Sidebar />
       <Navbar />
 
       <main
         style={{
-          marginLeft: "var(--sidebar-width)",
-          paddingTop: "var(--navbar-height)",
+          marginLeft: "var(--sidebar-w)",
+          paddingTop: "calc(var(--navbar-h) + 28px)",
+          paddingBottom: "40px",
+          paddingLeft: "28px",
+          paddingRight: "28px",
           minHeight: "100vh",
         }}
       >
-        <div className="p-6 animate-fade-in">{children}</div>
+        {children}
       </main>
 
       {showReportModal && (
