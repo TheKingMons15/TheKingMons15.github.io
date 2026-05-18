@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brochure Digital - rTMS</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- Header Brochure -->
+    <header class="navbar navbar-brochure">
+        <div class="container navbar-content">
+            <a href="index.html" class="back-link">
+                ← Volver al inicio
+            </a>
+            <div class="brochure-actions">
+                <button class="btn btn-download" onclick="window.print()">
+                    📥 Descargar PDF
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Brochure Container -->
+    <main class="brochure-container">
+
+        <!-- Página 1: Portada -->
+        <section class="brochure-page page-cover">
+            <div class="cover-bg"></div>
+            <div class="cover-content">
+                <img src="img/logo.png" alt="Logo" class="brochure-logo">
+                <div class="cover-text">
+                    <span class="cover-badge">Brochure Informativo</span>
+                    <h1 class="cover-title">
+                        Equipo de Estimulación Magnética<br>
+                        <span>Transcraneal Repetitiva</span><br>
+                        (rTMS)
+                    </h1>
+                    <p class="cover-subtitle">Tecnología médica avanzada</p>
+                </div>
+                <div class="cover-image">
+                    <img src="img/rtms-machine.png" alt="Equipo rTMS">
+                </div>
+                <div class="cover-contact">
+                    <div class="contact-item">
+                        <span class="contact-icon">📱</span>
+                        <span>WhatsApp: 098 401 7341</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Página 2: ¿Qué es rTMS? + Condiciones Tratadas (Combinada) -->
+        <section class="brochure-page page-combined">
+            <div class="page-header">
+                <span class="page-number">01</span>
+                <h2 class="page-title">Información General</h2>
+            </div>
+            <div class="page-content-split">
+                <!-- Columna Izquierda: ¿Qué es la rTMS? -->
+                <div class="split-column">
+                    <div class="column-header">
+                        <h3 class="column-title">¿Qué es la rTMS?</h3>
+                    </div>
+                    <div class="info-card main-info">
+                        <div class="info-icon">🧠</div>
+                        <h4>Estimulación Magnética Transcraneal Repetitiva</h4>
+                        <p>
+                            La rTMS es una técnica de neuromodulación no invasiva que utiliza
+                            campos magnéticos para estimular células nerviosas en el cerebro.
+                            Es un tratamiento aprobado por la FDA para diversas condiciones
+                            neurológicas y psiquiátricas.
+                        </p>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-card mini">
+                            <span class="mini-icon">✓</span>
+                            <h4>No invasivo</h4>
+                            <p>Sin cirugía, sin anestesia</p>
+                        </div>
+                        <div class="info-card mini">
+                            <span class="mini-icon">✓</span>
+                            <h4>Indoloro</h4>
+                            <p>Procedimiento cómodo</p>
+                        </div>
+                        <div class="info-card mini">
+                            <span class="mini-icon">✓</span>
+                            <h4>Ambulatorio</h4>
+                            <p>Sin hospitalización</p>
+                        </div>
+                        <div class="info-card mini">
+                            <span class="mini-icon">✓</span>
+                            <h4>Efectivo</h4>
+                            <p>Resultados comprobados</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Condiciones Tratadas -->
+                <div class="split-column">
+                    <div class="column-header">
+                        <h3 class="column-title">Condiciones Tratadas</h3>
+                    </div>
+                    <div class="conditions-grid">
+                        <div class="condition-card">
+                            <div class="condition-icon">😔</div>
+                            <h4>Depresión</h4>
+                            <p>Especialmente depresión resistente a medicamentos</p>
+                        </div>
+                        <div class="condition-card">
+                            <div class="condition-icon">😰</div>
+                            <h4>Ansiedad</h4>
+                            <p>Trastorno de ansiedad generalizada y pánico</p>
+                        </div>
+                        <div class="condition-card">
+                            <div class="condition-icon">🔄</div>
+                            <h4>TOC</h4>
+                            <p>Trastorno obsesivo-compulsivo</p>
+                        </div>
+                        <div class="condition-card">
+                            <div class="condition-icon">⚡</div>
+                            <h4>Migraña</h4>
+                            <p>Dolor de cabeza crónico</p>
+                        </div>
+                        <div class="condition-card">
+                            <div class="condition-icon">💢</div>
+                            <h4>Fibromialgia</h4>
+                            <p>Dolor crónico generalizado</p>
+                        </div>
+                        <div class="condition-card">
+                            <div class="condition-icon">🧩</div>
+                            <h4>Rehabilitación</h4>
+                            <p>Post-ACV y lesiones neurológicas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="brochure-page page-process">
+            <div class="page-header">
+                <span class="page-number">02</span>
+                <h2 class="page-title">Protocolo de Aplicación</h2>
+            </div>
+            <div class="page-content">
+                <div class="process-timeline">
+                    <div class="process-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Evaluación del Paciente</h4>
+                            <p>Consulta clínica para determinar si el paciente es candidato al tratamiento.</p>
+                        </div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Mapeo Cerebral</h4>
+                            <p>Uso del equipo para la localización precisa del área cerebral a estimular por parte del operador.</p>
+                        </div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Sesiones de Tratamiento</h4>
+                            <p>Protocolos del equipo de 20-40 minutos por sesión, configurables según la necesidad del paciente.</p>
+                        </div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4>Seguimiento Clínico</h4>
+                            <p>Evaluación continua de los resultados del paciente y ajuste de parámetros en la máquina.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="process-image">
+                    <img src="img/rtms-machine.png" alt="Equipo rTMS">
+                </div>
+            </div>
+        </section>
+
+        <!-- Página 4: Galería de Imágenes -->
+        <section class="brochure-page page-gallery">
+            <div class="page-header">
+                <span class="page-number">03</span>
+                <h2 class="page-title">Nuestro Equipo</h2>
+                <p class="page-subtitle">Tecnología de última generación para tu centro médico</p>
+            </div>
+            <div class="gallery-grid gallery-grid-2x2">
+                <div class="gallery-item" data-image="img/imagen 1.jpg"
+                    data-caption="Equipo rTMS de Alta Precisión - Sistema de neuromodulación con tecnología de vanguardia para tratamientos neuropsiquiátricos efectivos y seguros.">
+                    <img src="img/imagen 1.jpg" alt="Equipo rTMS - Vista frontal">
+                    <div class="gallery-overlay">
+                        <span class="gallery-icon">🔍</span>
+                        <p>Ver imagen completa</p>
+                    </div>
+                    <div class="gallery-label">
+                        <span>🔧 Equipo Principal</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-image="img/imagen 2.png"
+                    data-caption="Sistema de Control Avanzado - Interfaz intuitiva con parámetros personalizables para cada paciente, garantizando tratamientos precisos y monitoreados.">
+                    <img src="img/imagen 2.png" alt="Equipo rTMS - Panel de control">
+                    <div class="gallery-overlay">
+                        <span class="gallery-icon">🔍</span>
+                        <p>Ver imagen completa</p>
+                    </div>
+                    <div class="gallery-label">
+                        <span>💻 Panel de Control</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-image="img/imagen 3.png"
+                    data-caption="Aplicación del Equipo - Interacción con el paciente recibiendo terapia rTMS de forma cómoda y segura utilizando nuestra maquinaria avanzada.">
+                    <img src="img/imagen 3.png" alt="Paciente durante tratamiento rTMS">
+                    <div class="gallery-overlay">
+                        <span class="gallery-icon">🔍</span>
+                        <p>Ver imagen completa</p>
+                    </div>
+                    <div class="gallery-badge">
+                        <span>👦 Aplicación del Equipo</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-image="img/imagen 4.png"
+                    data-caption="Tecnología Certificada - Equipo aprobado por organismos regulatorios internacionales, diseñado para máxima eficacia y seguridad del paciente.">
+                    <img src="img/imagen 4.png" alt="Equipo rTMS - Vista adicional">
+                    <div class="gallery-overlay">
+                        <span class="gallery-icon">🔍</span>
+                        <p>Ver imagen completa</p>
+                    </div>
+                    <div class="gallery-label">
+                        <span>⚡ Sistema Completo</span>
+                    </div>
+                </div>
+            </div>
+            <p class="gallery-note">
+                <em>Haz clic en cualquier imagen para verla en tamaño completo con descripción detallada</em>
+            </p>
+        </section>
+
+        <!-- Página 5: Certificaciones y Documentación -->
+        <section class="brochure-page page-certifications">
+            <div class="page-header">
+                <span class="page-number">04</span>
+                <h2 class="page-title">Certificaciones y Calidad</h2>
+                <p class="page-subtitle">Respaldo internacional y cumplimiento normativo</p>
+            </div>
+
+            <div class="certifications-intro">
+                <p class="intro-text">
+                    Nuestro equipo rTMS cuenta con las certificaciones más rigurosas de la industria médica,
+                    garantizando los más altos estándares de calidad, seguridad y eficacia en cada tratamiento.
+                </p>
+            </div>
+
+            <div class="certifications-grid">
+                <!-- ISO Certificate -->
+                <div class="certification-item" data-image="img/Certificate of registration.jpeg"
+                    data-caption="Certificado ISO13485:2016 - Sistema de Gestión de Calidad para Dispositivos Médicos. Emitido por Certification Europe para Weifang Benbo Medical Apparatus Co., Ltd. Válido para producción y venta de dispositivos médicos Clase III incluyendo máquinas láser de alta intensidad, equipos magnéticos y de estimulación transcraneal repetitiva.">
+                    <div class="cert-image-wrapper">
+                        <img src="img/Certificate of registration.jpeg" alt="Certificado ISO13485:2016">
+                        <div class="cert-overlay">
+                            <span class="cert-icon">🔍</span>
+                            <p>Ver certificado completo</p>
+                        </div>
+                    </div>
+                    <div class="cert-info">
+                        <div class="cert-badge iso-badge">
+                            <span>✓ ISO 13485:2016</span>
+                        </div>
+                        <h3>Certificación de Registro</h3>
+                        <p class="cert-description">
+                            <strong>Sistema de Gestión de Calidad para Dispositivos Médicos</strong><br>
+                            Certificado internacional que garantiza que nuestros equipos cumplen con los estándares
+                            más exigentes de fabricación, control de calidad y seguridad del paciente.
+                        </p>
+                        <ul class="cert-features">
+                            <li>✓ Válido para dispositivos médicos Clase III</li>
+                            <li>✓ Emitido por Certification Europe</li>
+                            <li>✓ Auditorías anuales de cumplimiento</li>
+                            <li>✓ Reconocimiento internacional IAF</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="certification-item" data-image="img/documentation review.jpeg"
+                    data-caption="Revisión de Documentación ICR Polska - Verificación técnica de compatibilidad con la Directiva de Dispositivos Médicos (MDD) 2017/745. Confirma que el equipo de estimulación magnética transcraneal repetitiva cumple con todos los requisitos de documentación técnica y normativa europea. Nuestro equipo rTMS está regulado bajo estas certificaciones.">
+                    <div class="cert-image-wrapper">
+                        <img src="img/documentation review.jpeg" alt="Revisión de Documentación ICR">
+                        <div class="cert-overlay">
+                            <span class="cert-icon">🔍</span>
+                            <p>Ver documento completo</p>
+                        </div>
+                    </div>
+                    <div class="cert-info">
+                        <div class="cert-badge icr-badge">
+                            <span>✓ ICR Verified</span>
+                        </div>
+                        <h3>Revisión de Documentación Técnica</h3>
+                        <p class="cert-description">
+                            <strong>Verificación ICR Polska - Organismo Notificado</strong><br>
+                            Revisión exhaustiva de la documentación técnica que confirma la compatibilidad
+                            del equipo con la Directiva Europea de Dispositivos Médicos (MDD) 2017/745.
+                        </p>
+                        <ul class="cert-features">
+                            <li>✓ Cumplimiento normativa europea MDD</li>
+                            <li>✓ Documentación técnica verificada</li>
+                            <li>✓ Modelos WF-9903 a WF-9906 certificados</li>
+                            <li>✓ Revisión por organismo notificado</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="certifications-footer">
+                <div class="footer-highlight">
+                    <div class="highlight-icon">🏆</div>
+                    <div class="highlight-content">
+                        <h4>Garantía de Calidad Internacional</h4>
+                        <p>
+                            Nuestras certificaciones ISO13485:2016 y la verificación de documentación técnica
+                            por organismos notificados europeos garantizan que cada equipo rTMS cumple con los
+                            estándares más rigurosos de la industria médica mundial.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Página 6: Contacto -->
+        <section class="brochure-page page-contact">
+            <div class="contact-card">
+                <img src="img/logo.png" alt="Logo" class="contact-logo">
+
+                <!-- Pricing Badge -->
+                <div class="pricing-badge">
+                    <span class="promo-label">¡Aprovecha!</span>
+                    <div class="price-display">
+                        <span class="currency">$</span>
+                        <span class="price">3,500</span>
+                    </div>
+                    <p class="price-description">El mejor Equipo del Mercado</p>
+                </div>
+
+                <h2>¡Adquiere tu Equipo!</h2>
+                <p class="contact-description">
+                    Nuestro equipo de asesores está listo para ayudarte
+                    a equipar tu centro médico con la mejor tecnología.
+                </p>
+                <div class="contact-info-grid">
+                    <div class="contact-info-item">
+                        <span class="contact-info-icon">📱</span>
+                        <div>
+                            <strong>WhatsApp</strong>
+                            <p>098 401 7341</p>
+                        </div>
+                    </div>
+                    <div class="contact-info-item">
+                        <span class="contact-info-icon">📧</span>
+                        <div>
+                            <strong>Email</strong>
+                            <p>neurotececuador@gmail.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-info-item">
+                        <span class="contact-info-icon">📍</span>
+                        <div>
+                            <strong>Ubicación</strong>
+                            <p>Quito, Ecuador</p>
+                        </div>
+                    </div>
+                </div>
+                <a href="https://wa.me/5930984017341" class="btn btn-whatsapp-large" target="_blank">
+                    Escribir por WhatsApp
+                </a>
+                <p class="contact-note">
+                    <em>Tecnología médica avanzada • Equipo certificado • Venta de máquina únicamente • Curso de manejo
+                        disponible por separado</em>
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="image-modal">
+        <span class="modal-close">&times;</span>
+        <img class="modal-content" id="modalImage" alt="Imagen ampliada">
+        <div class="modal-caption" id="modalCaption"></div>
+    </div>
+
+    <!-- Print Styles Notice -->
+    <div class="print-notice">
+        <p>💡 Presiona <strong>Ctrl + P</strong> o usa el botón "Descargar PDF" para guardar este brochure.</p>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>

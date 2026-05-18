@@ -81,7 +81,7 @@ export default function ForgotPasswordPage() {
                 Revisa tu bandeja de entrada y sigue las instrucciones para restablecer tu contraseña.
               </p>
               <Link
-                href="/login"
+                href="/acceso"
                 className="text-sm font-medium"
                 style={{ color: "var(--accent-blue-light)" }}
               >
@@ -127,7 +127,7 @@ export default function ForgotPasswordPage() {
                 {loading ? "Enviando..." : "Enviar enlace de recuperación"}
               </button>
               <Link
-                href="/login"
+                href="/acceso"
                 className="flex items-center gap-2 text-sm justify-center transition-colors"
                 style={{ color: "var(--text-muted)" }}
               >

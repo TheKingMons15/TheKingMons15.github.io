@@ -59,7 +59,7 @@ export default function Sidebar() {
   const handleSignOut = async () => {
     await signOut();
     toast.success("Sesión cerrada");
-    router.push("/login");
+    router.push("/acceso");
   };
 
   const filteredItems = navItems.filter(
