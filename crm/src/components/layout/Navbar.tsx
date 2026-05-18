@@ -5,126 +5,126 @@ import { Bell, Search } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
 
-const pageTitles: Record<string, string> = {
-  "/dashboard":   "Dashboard",
-  "/clientes":    "Clientes",
-  "/seguimientos":"Seguimientos",
-  "/reportes":    "Reportes Diarios",
-  "/admin":       "Administración",
+const pageTitles: Record<string, { title: string; sub: string }> = {
+  "/dashboard":    { title: "Dashboard",        sub: "Resumen general" },
+  "/clientes":     { title: "Clientes",          sub: "Gestión del CRM" },
+  "/seguimientos": { title: "Seguimientos",      sub: "Actividad de contacto" },
+  "/reportes":     { title: "Reportes Diarios",  sub: "Registro de actividad" },
+  "/admin":        { title: "Administración",    sub: "Gestión de usuarios" },
 };
 
 export default function Navbar() {
   const { profile } = useAuth();
   const pathname = usePathname();
-  const [search, setSearch] = useState("");
+  const [focused, setFocused] = useState(false);
 
-  const title = Object.entries(pageTitles)
-    .find(([key]) => pathname.startsWith(key))?.[1] ?? "Panel";
+  const page = Object.entries(pageTitles).find(([key]) => pathname.startsWith(key))?.[1]
+    ?? { title: "Panel", sub: "Neurotec CRM" };
 
   const today = new Date().toLocaleDateString("es-EC", {
-    weekday: "long", year: "numeric", month: "long", day: "numeric",
+    weekday: "long", day: "numeric", month: "long",
   });
 
   return (
     <header
-      className="fixed top-0 right-0 z-30 flex items-center justify-between px-6"
       style={{
-        left: "var(--sidebar-width)",
-        height: "var(--navbar-height)",
-        background: "var(--bg-secondary)",
+        position: "fixed", top: 0, right: 0, zIndex: 30,
+        left: "var(--sidebar-w)",
+        height: "var(--navbar-h)",
+        background: "rgba(245,245,247,0.85)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
         borderBottom: "1px solid var(--border)",
-        boxShadow: "0 1px 0 var(--border)",
+        display: "flex", alignItems: "center",
+        justifyContent: "space-between",
+        padding: "0 24px",
       }}
     >
       {/* Título */}
       <div>
-        <h2 className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>
-          {title}
-        </h2>
-        <p className="text-xs capitalize" style={{ color: "var(--text-muted)" }}>
+        <h1 style={{ fontSize: "17px", fontWeight: 700, color: "var(--text-primary)", lineHeight: 1.2 }}>
+          {page.title}
+        </h1>
+        <p style={{ fontSize: "11px", color: "var(--text-muted)", marginTop: "1px", textTransform: "capitalize" }}>
           {today}
         </p>
       </div>
 
-      {/* Barra de búsqueda + acciones */}
-      <div className="flex items-center gap-3">
-        {/* Search */}
-        <div className="relative hidden md:block">
+      {/* Acciones */}
+      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        {/* Buscador */}
+        <div style={{ position: "relative" }}>
           <Search
-            size={14}
-            className="absolute left-3 top-1/2 -translate-y-1/2"
-            style={{ color: "var(--text-muted)" }}
+            size={13}
+            style={{
+              position: "absolute", left: "11px", top: "50%",
+              transform: "translateY(-50%)", color: "var(--text-muted)",
+              pointerEvents: "none",
+            }}
           />
           <input
             type="text"
             placeholder="Buscar..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 pr-4 py-2 text-sm rounded-xl outline-none transition-all"
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
             style={{
-              width: "200px",
-              background: "var(--bg-primary)",
-              border: "1px solid var(--border)",
-              color: "var(--text-primary)",
-            }}
-            onFocus={(e) => {
-              e.target.style.borderColor = "var(--accent-light)";
-              e.target.style.boxShadow = "0 0 0 3px var(--accent-bg)";
-              e.target.style.width = "240px";
-            }}
-            onBlur={(e) => {
-              e.target.style.borderColor = "var(--border)";
-              e.target.style.boxShadow = "none";
-              e.target.style.width = "200px";
+              paddingLeft: "32px", paddingRight: "12px",
+              paddingTop: "7px", paddingBottom: "7px",
+              width: focused ? "220px" : "160px",
+              background: "rgba(0,0,0,0.05)",
+              border: `1px solid ${focused ? "var(--accent)" : "transparent"}`,
+              borderRadius: "var(--r-full)",
+              fontSize: "13px", color: "var(--text-primary)",
+              outline: "none",
+              transition: "all 0.2s ease",
+              boxShadow: focused ? "0 0 0 3px var(--accent-bg)" : "none",
             }}
           />
         </div>
 
-        {/* Notificaciones */}
+        {/* Notificación */}
         <button
-          className="relative w-9 h-9 rounded-xl flex items-center justify-center transition-all"
           style={{
-            background: "var(--bg-primary)",
-            border: "1px solid var(--border)",
-            color: "var(--text-secondary)",
+            width: "34px", height: "34px", borderRadius: "50%",
+            background: "rgba(0,0,0,0.04)", border: "1px solid var(--border)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            cursor: "pointer", position: "relative", color: "var(--text-secondary)",
+            transition: "background 0.15s",
           }}
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.background = "var(--bg-hover)";
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.background = "var(--bg-primary)";
-          }}
+          onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.background = "rgba(0,0,0,0.07)")}
+          onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.background = "rgba(0,0,0,0.04)")}
         >
-          <Bell size={15} />
-          <span
-            className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full"
-            style={{ background: "var(--danger)", animation: "pulse-dot 2s infinite" }}
-          />
+          <Bell size={15} strokeWidth={1.8} />
+          <span style={{
+            position: "absolute", top: "7px", right: "7px",
+            width: "7px", height: "7px", borderRadius: "50%",
+            background: "var(--red)", border: "1.5px solid var(--bg)",
+          }} />
         </button>
 
-        {/* Avatar usuario */}
+        {/* Avatar */}
         {profile && (
           <div
-            className="flex items-center gap-2.5 px-3 py-2 rounded-xl cursor-default"
             style={{
-              background: "var(--bg-primary)",
+              display: "flex", alignItems: "center", gap: "8px",
+              padding: "5px 12px 5px 6px",
+              background: "rgba(0,0,0,0.04)",
               border: "1px solid var(--border)",
+              borderRadius: "var(--r-full)",
+              cursor: "default",
             }}
           >
-            <div
-              className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold"
-              style={{ background: "var(--accent-bg)", color: "var(--accent)", border: "1px solid var(--accent-border)" }}
-            >
+            <div style={{
+              width: "26px", height: "26px", borderRadius: "50%",
+              background: "var(--accent-bg)", border: "1.5px solid var(--accent-border)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: "11px", fontWeight: 700, color: "var(--accent)",
+            }}>
               {profile.nombre?.charAt(0).toUpperCase()}
             </div>
-            <div className="hidden sm:block">
-              <p className="text-sm font-semibold leading-none" style={{ color: "var(--text-primary)" }}>
-                {profile.nombre?.split(" ")[0]}
-              </p>
-              <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
-                {profile.rol === "admin" ? "Admin" : "Vendedor"}
-              </p>
-            </div>
+            <span style={{ fontSize: "13px", fontWeight: 600, color: "var(--text-primary)" }}>
+              {profile.nombre?.split(" ")[0]}
+            </span>
           </div>
         )}
       </div>

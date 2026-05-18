@@ -3,20 +3,17 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import {
-  LayoutDashboard, Users, Phone, FileText, Shield, LogOut, ChevronRight,
-} from "lucide-react";
+import { LayoutDashboard, Users, Phone, FileText, Shield, LogOut, ChevronRight } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 
 const navItems = [
-  { label: "Dashboard",      href: "/dashboard",   icon: LayoutDashboard, adminOnly: false },
-  { label: "Clientes",       href: "/clientes",    icon: Users,           adminOnly: false },
-  { label: "Seguimientos",   href: "/seguimientos",icon: Phone,           adminOnly: false },
-  { label: "Reportes",       href: "/reportes",    icon: FileText,        adminOnly: false },
-  { label: "Administración", href: "/admin",       icon: Shield,          adminOnly: true  },
+  { label: "Dashboard",      href: "/dashboard",    icon: LayoutDashboard, adminOnly: false },
+  { label: "Clientes",       href: "/clientes",     icon: Users,           adminOnly: false },
+  { label: "Seguimientos",   href: "/seguimientos", icon: Phone,           adminOnly: false },
+  { label: "Reportes",       href: "/reportes",     icon: FileText,        adminOnly: false },
+  { label: "Administración", href: "/admin",        icon: Shield,          adminOnly: true  },
 ];
 
 export default function Sidebar() {
@@ -36,39 +33,40 @@ export default function Sidebar() {
     <aside
       className="fixed left-0 top-0 h-full flex flex-col z-40"
       style={{
-        width: "var(--sidebar-width)",
-        background: "var(--bg-secondary)",
+        width: "var(--sidebar-w)",
+        background: "rgba(255,255,255,0.82)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
         borderRight: "1px solid var(--border)",
       }}
     >
-      {/* Logo */}
-      <div
-        className="flex items-center gap-3 px-5 py-5"
-        style={{ borderBottom: "1px solid var(--border)" }}
-      >
-        <div
-          className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 flex items-center justify-center"
-          style={{ background: "#f1f5f9", border: "1px solid var(--border)" }}
-        >
-          <img src="/img/logo.png" alt="Neurotec" className="w-9 h-9 object-contain" />
-        </div>
-        <div>
-          <p className="text-sm font-bold" style={{ color: "var(--text-primary)" }}>
-            Neurotec CRM
-          </p>
-          <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-            {profile?.rol === "admin" ? "Administrador" : "Vendedor"}
-          </p>
+      {/* Logo + app name */}
+      <div style={{ padding: "20px 16px 16px", borderBottom: "1px solid var(--border)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <div style={{
+            width: "36px", height: "36px", borderRadius: "10px",
+            overflow: "hidden", padding: "4px",
+            background: "white", border: "1px solid var(--border)",
+            boxShadow: "var(--shadow-xs)",
+            flexShrink: 0,
+          }}>
+            <img src="/img/logo.png" alt="Logo" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+          </div>
+          <div>
+            <p style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)", lineHeight: 1.2 }}>
+              Neurotec CRM
+            </p>
+            <p style={{ fontSize: "11px", color: "var(--text-muted)", marginTop: "2px" }}>
+              {profile?.rol === "admin" ? "Administrador" : "Vendedor"}
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* Nav */}
-      <nav className="flex-1 px-3 py-5 space-y-1 overflow-y-auto">
-        <p
-          className="text-xs font-semibold uppercase tracking-widest px-3 mb-3"
-          style={{ color: "var(--text-light)" }}
-        >
-          Menú
+      {/* Nav items */}
+      <nav style={{ flex: 1, padding: "12px 10px", overflowY: "auto" }}>
+        <p style={{ fontSize: "10px", fontWeight: 700, color: "var(--text-light)", textTransform: "uppercase", letterSpacing: "0.08em", padding: "4px 8px 10px" }}>
+          Navegación
         </p>
 
         {items.map((item, i) => {
@@ -78,40 +76,28 @@ export default function Sidebar() {
           return (
             <motion.div
               key={item.href}
-              initial={{ opacity: 0, x: -12 }}
+              initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.06 }}
+              transition={{ delay: i * 0.05, duration: 0.3 }}
             >
-              <Link href={item.href}>
+              <Link href={item.href} style={{ textDecoration: "none" }}>
                 <div
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all cursor-pointer relative"
                   style={{
+                    display: "flex", alignItems: "center", gap: "9px",
+                    padding: "8px 10px", borderRadius: "var(--r-sm)",
+                    marginBottom: "2px", cursor: "pointer",
                     background: isActive ? "var(--accent-bg)" : "transparent",
                     color: isActive ? "var(--accent)" : "var(--text-secondary)",
-                    border: isActive ? "1px solid var(--accent-border)" : "1px solid transparent",
+                    fontWeight: isActive ? 600 : 500,
+                    fontSize: "13.5px",
+                    transition: "all 0.15s ease",
                   }}
-                  onMouseEnter={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.background = "var(--bg-hover)";
-                      e.currentTarget.style.color = "var(--text-primary)";
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.background = "transparent";
-                      e.currentTarget.style.color = "var(--text-secondary)";
-                    }
-                  }}
+                  onMouseEnter={(e) => { if (!isActive) { e.currentTarget.style.background = "var(--bg-hover)"; e.currentTarget.style.color = "var(--text-primary)"; } }}
+                  onMouseLeave={(e) => { if (!isActive) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--text-secondary)"; } }}
                 >
-                  {isActive && (
-                    <div
-                      className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-r-full"
-                      style={{ background: "var(--accent)" }}
-                    />
-                  )}
-                  <Icon size={17} />
-                  <span className="text-sm font-medium flex-1">{item.label}</span>
-                  {isActive && <ChevronRight size={13} className="opacity-50" />}
+                  <Icon size={16} strokeWidth={isActive ? 2.2 : 1.8} />
+                  <span style={{ flex: 1 }}>{item.label}</span>
+                  {isActive && <ChevronRight size={12} style={{ opacity: 0.5 }} />}
                 </div>
               </Link>
             </motion.div>
@@ -119,43 +105,48 @@ export default function Sidebar() {
         })}
       </nav>
 
-      {/* Usuario + logout */}
-      <div className="px-3 pb-4" style={{ borderTop: "1px solid var(--border)", paddingTop: "12px" }}>
+      {/* Footer — user info */}
+      <div style={{ padding: "10px", borderTop: "1px solid var(--border)" }}>
         {profile && (
-          <div
-            className="flex items-center gap-3 px-3 py-3 rounded-xl mb-2"
-            style={{ background: "var(--bg-primary)" }}
-          >
-            <div
-              className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0"
-              style={{ background: "var(--accent-bg)", color: "var(--accent)", border: "1px solid var(--accent-border)" }}
-            >
+          <div style={{
+            display: "flex", alignItems: "center", gap: "9px",
+            padding: "9px 10px", borderRadius: "var(--r-sm)",
+            marginBottom: "4px",
+            background: "var(--bg-hover)",
+          }}>
+            <div style={{
+              width: "30px", height: "30px", borderRadius: "50%",
+              background: "var(--accent-bg)", border: "1px solid var(--accent-border)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: "12px", fontWeight: 700, color: "var(--accent)",
+              flexShrink: 0,
+            }}>
               {profile.nombre?.charAt(0).toUpperCase()}
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold truncate" style={{ color: "var(--text-primary)" }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <p style={{ fontSize: "13px", fontWeight: 600, color: "var(--text-primary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                 {profile.nombre}
               </p>
-              <p className="text-xs truncate" style={{ color: "var(--text-muted)" }}>
+              <p style={{ fontSize: "11px", color: "var(--text-muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                 {profile.email}
               </p>
             </div>
           </div>
         )}
+
         <button
           onClick={handleSignOut}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all"
-          style={{ color: "var(--text-muted)" }}
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.background = "var(--danger-bg)";
-            (e.currentTarget as HTMLButtonElement).style.color = "var(--danger)";
+          style={{
+            width: "100%", display: "flex", alignItems: "center", gap: "9px",
+            padding: "8px 10px", borderRadius: "var(--r-sm)",
+            background: "none", border: "none", cursor: "pointer",
+            fontSize: "13.5px", fontWeight: 500, color: "var(--text-secondary)",
+            transition: "all 0.15s",
           }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.background = "transparent";
-            (e.currentTarget as HTMLButtonElement).style.color = "var(--text-muted)";
-          }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--red-bg)"; (e.currentTarget as HTMLButtonElement).style.color = "var(--red)"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "none"; (e.currentTarget as HTMLButtonElement).style.color = "var(--text-secondary)"; }}
         >
-          <LogOut size={16} />
+          <LogOut size={15} strokeWidth={1.8} />
           Cerrar sesión
         </button>
       </div>
